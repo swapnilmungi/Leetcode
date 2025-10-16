@@ -60,6 +60,8 @@ e.occurrences>a.avg
 group by business_id
 having count(business_id)>1
 
+---------------------------------------------------------------------------------------------------------------------------------------
+ 
 SELECT business_id
 FROM(
 SELECT business_id,occurrences ,(avg(occurrences) over(Partition by event_type)) as AVG_occurrences
@@ -67,3 +69,15 @@ FROM Events) AS T1
 WHERE occurrences >AVG_occurrences
 GROUP BY business_id
 HAVING COUNT(*)>1;
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+with cte as(
+    SELECT business_id,occurrences ,(avg(occurrences) over(Partition by event_type)) as AVG_occurrences
+FROM Events 
+)
+select business_id
+from cte
+where occurrences >AVG_occurrences
+group by business_id
+having count(business_id)>1
